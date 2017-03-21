@@ -1,0 +1,124 @@
+package com.netcracker.services;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.InputMismatchException;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Scanner;
+
+import com.netcracker.beans.cards.AbstractCard;
+import com.netcracker.beans.users.User;
+import com.netcracker.enums.CardStatus;
+import com.netcracker.exceptions.IllegalValueException;
+
+public class ManagerUtils {
+
+	private static Scanner scanner;
+
+	private ManagerUtils() {
+	}
+
+	public static int getInputNumber() {
+		int choise = -1;
+		while (choise < 0) {
+			try {
+				scanner = new Scanner(System.in);
+				choise = scanner.nextInt();
+				if (choise >= 0) {
+					break;
+				} else {
+					System.out.println("Введено некорректное число!");
+				}
+			} catch (InputMismatchException e) {
+				System.out.println("Введите число!");
+			}
+		}
+		return choise;
+	}
+
+	public static String getInputString() {
+		scanner = new Scanner(System.in);
+		return scanner.nextLine();
+	}
+
+	public static User validate(User currentUser) {
+		if (currentUser == null) {
+			throw new IllegalValueException();
+		}
+		Iterator<User> iterator = PaymentSystemManager.users.iterator();
+		UserComparator userComparator = new UserComparator();
+		while (iterator.hasNext()) {
+			User user = iterator.next();
+			if (userComparator.compare(currentUser, user) == 1) {
+				return user;
+			}
+		}
+		return null;
+	}
+
+	public static AbstractCard getCard(List<AbstractCard> listOfUserCards, int index) {
+		if (listOfUserCards == null) {
+			throw new IllegalValueException();
+		}
+		try {
+			return listOfUserCards.get(index - 1);
+		} catch (IndexOutOfBoundsException e) {
+			System.out.println("Введено неверное число!");
+			return null;
+		}
+
+	}
+
+	public static boolean cardIsBlocked(AbstractCard card) {
+		if (card == null) {
+			throw new IllegalValueException();
+		}
+		if (card.getStatus().equals(CardStatus.BLOCKED)) {
+			return true;
+		} else
+			return false;
+	}
+
+	public static AbstractCard getCard(User user) {
+		if (user == null) {
+			throw new IllegalValueException();
+		}
+		System.out.println("Введите номер карточки:");
+		int choise = ManagerUtils.getInputNumber();
+		return getCard(user.getUserCards(), choise);
+
+	}
+
+	public static boolean saveInDocument(User user) {
+		if (user == null) {
+			throw new IllegalValueException();
+		}
+		try (ObjectOutputStream outputStream = new ObjectOutputStream(
+				new FileOutputStream(new File("src/com/netcracker/files/outputfiles/" + user.hashCode() + ".txt")));) {
+			outputStream.writeObject(user);
+			return true;
+		} catch (FileNotFoundException e) {
+			return false;
+		} catch (IOException e) {
+			return false;
+		}
+	}
+
+	public static User getUser(List<User> users, int index) {
+		if (users == null) {
+			throw new IllegalValueException();
+		}
+
+		try {
+			return users.get(index - 1);
+		} catch (IndexOutOfBoundsException e) {
+			System.out.println("Введите корректное значение!");
+			return null;
+		}
+	}
+
+}
