@@ -1,10 +1,8 @@
 package com.netcracker.services;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.List;
@@ -97,13 +95,19 @@ public class ManagerUtils {
 		if (user == null) {
 			throw new IllegalArgumentException();
 		}
-		try (ObjectOutputStream outputStream = new ObjectOutputStream(
-				new FileOutputStream(new File("src/com/netcracker/files/outputfiles/" + user.hashCode() + ".txt")));) {
-			outputStream.writeObject(user);
+		try (FileWriter writer = new FileWriter(
+				new File("src/com/netcracker/files/outputfiles/" + user.hashCode() + ".txt"))) {
+
+			user.getUserCards().forEach(card -> {
+				try {
+					writer.write(card + "\n");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			});
 			return true;
-		} catch (FileNotFoundException e) {
-			return false;
-		} catch (IOException e) {
+		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 	}

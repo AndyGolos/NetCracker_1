@@ -6,20 +6,20 @@ import java.util.Set;
 public class IdGenerator {
 
 	// Добавить в другой класс?
-	private static Set<Integer> idUserSet;
-	private static Set<Integer> idCardSet;
+	// private static Set<Integer> idUserSet;
+	// private static Set<Integer> idCardSet;
 
 	private IdGenerator() {
 	}
 
 	public static int getIdForUser() {
 
-		return getId(10000, idUserSet);
+		return getId(10000, IdUserSet.getIdUserSet());
 	}
 
 	public static int getIdForCard() {
 
-		return getId(100000, idCardSet);
+		return getId(100000, IdCardSet.getIdCardSet());
 	}
 
 	public static int getId(int multiplier, Set<Integer> set) {

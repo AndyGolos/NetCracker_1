@@ -23,6 +23,9 @@ public class PaymentSystemManager {
 		// Инициализация данных из файла
 		users = Initialization.dataInitialization(users, DATA_FILE_NAME);
 
+		// users.get(0).getUserCards().add(new CreditCard(20, 1111,
+		// CardStatus.ACTIVE, CardType.MAESTRO, 5));
+
 		// System.out.println(User.getNumberOfClients());
 		// System.out.println(AbstractCard.getNumberOfCards());
 
