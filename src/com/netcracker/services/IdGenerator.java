@@ -5,6 +5,7 @@ import java.util.Set;
 
 public class IdGenerator {
 
+	// Добавить в другой класс?
 	private static Set<Integer> idUserSet;
 	private static Set<Integer> idCardSet;
 

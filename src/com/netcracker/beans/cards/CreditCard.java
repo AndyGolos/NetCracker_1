@@ -10,10 +10,6 @@ public class CreditCard extends AbstractCard {
 	private int moneyOnTheAccount; // количество денег на карточке
 	private int valid; // срок действия карточки(лет)
 
-	public CreditCard() {
-		super();
-	}
-
 	public CreditCard(int id, int pin, CardStatus status, CardType type, int valid) {
 		super(id, pin, status, type);
 		this.valid = valid;

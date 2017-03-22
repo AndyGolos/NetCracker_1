@@ -18,11 +18,6 @@ public abstract class AbstractCard implements Serializable {
 	private Date timeOfRegistration;
 	private static int numberOfCards = 0;
 
-	public AbstractCard() {
-		super();
-		numberOfCards++;
-	}
-
 	public AbstractCard(int id, int pinCode, CardStatus status, CardType type) {
 		super();
 		this.id = id;
