@@ -12,36 +12,29 @@ public class IdGenerator {
 	}
 
 	public static int getIdForUser() {
-		if (idUserSet == null) {
-			idUserSet = new HashSet<>();
-		}
 
-		Integer randomId = (int) Math.floor(Math.random() * 10000);
-		if (randomId < 1000) {
-			randomId += 1000;
-		}
-		if (idUserSet.contains(new Integer(randomId))) {
-			return getIdForUser();
-		} else {
-			idUserSet.add(randomId);
-			return randomId;
-		}
+		return getId(10000, idUserSet);
 	}
 
 	public static int getIdForCard() {
-		if (idCardSet == null) {
-			idCardSet = new HashSet<>();
-		}
 
-		Integer randomId = (int) Math.floor(Math.random() * 100000);
-		if (randomId < 10000) {
-			randomId += 10000;
+		return getId(100000, idCardSet);
+	}
+
+	public static int getId(int multiplier, Set<Integer> set) {
+		if (set == null) {
+			set = new HashSet<>();
 		}
-		if (idCardSet.contains(new Integer(randomId))) {
-			return getIdForCard();
+		Integer randomId = (int) Math.floor(Math.random() * multiplier);
+		if (randomId < multiplier / 10) {
+			randomId += (multiplier / 10);
+		}
+		if (set.contains(new Integer(randomId))) {
+			return getId(multiplier, set);
 		} else {
-			idCardSet.add(randomId);
+			set.add(randomId);
 			return randomId;
 		}
 	}
+
 }
