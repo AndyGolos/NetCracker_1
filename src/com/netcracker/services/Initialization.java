@@ -18,12 +18,14 @@ public class Initialization {
 
 	public static void saveData(List<User> users, String dataFileName) {
 
+		// Если файл существует, то мы удаляем его, а затем заново создаём и
+		// пишем в него новую инфу
 		if (new File(dataFileName).exists()) {
 			new File(dataFileName).delete();
 		}
 
 		try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(new File(dataFileName)))) {
-			
+
 			outputStream.writeObject(users);
 
 		} catch (FileNotFoundException e) {

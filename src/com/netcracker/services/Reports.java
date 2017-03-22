@@ -6,7 +6,6 @@ import java.util.List;
 import com.netcracker.beans.cards.AbstractCard;
 import com.netcracker.beans.users.Client;
 import com.netcracker.beans.users.User;
-import com.netcracker.exceptions.IllegalValueException;
 
 public class Reports {
 
@@ -28,7 +27,7 @@ public class Reports {
 
 	public static void getCards(User user) {
 		if (user == null) {
-			throw new IllegalValueException();
+			throw new IllegalArgumentException();
 		}
 		int counter = 1;
 		Iterator<AbstractCard> iterator = user.getUserCards().iterator();
@@ -43,6 +42,39 @@ public class Reports {
 		System.out.println("Ждём вас в следующий раз!");
 		System.out.println("-----------------------");
 		System.exit(0);
+	}
+
+	public static void startMenu() {
+		System.out.println("-----------------------");
+		System.out.println("1. Авторизация");
+		System.out.println("0. Выход");
+		System.out.println("-----------------------");
+	}
+
+	public static void clientMenu() {
+		System.out.println("-----------------------");
+		System.out.println("1. Пополнить счёт");
+		System.out.println("2. Совершить платёж");
+		System.out.println("3. Заблокировать карточку");
+		System.out.println("4. Посмотреть имеющиеся карточки");
+		System.out.println("5. Сохранить данные в файл");
+		System.out.println("0. Выход");
+		System.out.println("-----------------------");
+	}
+
+	public static void adminMenu() {
+		System.out.println("-----------------------");
+		System.out.println("1. Просмотреть всех юзеров в системе");
+		System.out.println("2. Разблокировать карточку");
+		System.out.println("0. Выход");
+		System.out.println("-----------------------");
+	}
+
+	public static void clientServices() {
+		System.out.println("Выбирете услугу, которую хотите оплатить:");
+		System.out.println("1. Машину");
+		System.out.println("2. Квартиру");
+		System.out.println("3. Стоянку");
 	}
 
 }

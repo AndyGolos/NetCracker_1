@@ -29,9 +29,9 @@ public class StaticDataInput {
 			String[] surnames = { "Голосов", "Волков", "Меленский", "Киселёва", "Мараев", "Логинова", "Бутрим",
 					"Мирлас", "Высоцкий", "Гапчинский" };
 
-			String[] adminsnames = { "Эдуардо", "Максим", "Нерзул" };
+			String[] adminsNames = { "Эдуардо", "Максим", "Нерзул" };
 
-			String[] adminssurnamesnames = { "Первый", "Второй", "Игоревич" };
+			String[] adminsSurnames = { "Первый", "Второй", "Игоревич" };
 
 			CardType[] type = { CardType.VISA, CardType.MAESTRO, CardType.MASTERCARD, CardType.VISA, CardType.MAESTRO,
 					CardType.MASTERCARD, CardType.VISA, CardType.MAESTRO, CardType.MASTERCARD, CardType.VISA,
@@ -40,6 +40,7 @@ public class StaticDataInput {
 
 			List<AbstractCard> listOfCards;
 			int cardNumber = 0;
+
 			for (int client = 0; client < 10; client++) {
 				listOfCards = new ArrayList<>();
 
@@ -56,8 +57,7 @@ public class StaticDataInput {
 			}
 
 			for (int i = 0; i < 3; i++) {
-				users.add(new Admin(IdGenerator.getIdForUser(), adminsnames[i], adminssurnamesnames[i], 2222,
-						new Date()));
+				users.add(new Admin(IdGenerator.getIdForUser(), adminsNames[i], adminsSurnames[i], 2222, new Date()));
 			}
 
 			outputStream.writeObject(users);

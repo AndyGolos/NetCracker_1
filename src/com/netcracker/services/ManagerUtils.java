@@ -13,7 +13,7 @@ import java.util.Scanner;
 import com.netcracker.beans.cards.AbstractCard;
 import com.netcracker.beans.users.User;
 import com.netcracker.enums.CardStatus;
-import com.netcracker.exceptions.IllegalValueException;
+import com.netcracker.exceptions.NoUserFoundException;
 
 public class ManagerUtils {
 
@@ -47,7 +47,7 @@ public class ManagerUtils {
 
 	public static User validate(User currentUser) {
 		if (currentUser == null) {
-			throw new IllegalValueException();
+			throw new IllegalArgumentException();
 		}
 		Iterator<User> iterator = PaymentSystemManager.users.iterator();
 		UserComparator userComparator = new UserComparator();
@@ -57,12 +57,12 @@ public class ManagerUtils {
 				return user;
 			}
 		}
-		return null;
+		throw new NoUserFoundException();
 	}
 
 	public static AbstractCard getCard(List<AbstractCard> listOfUserCards, int index) {
 		if (listOfUserCards == null) {
-			throw new IllegalValueException();
+			throw new IllegalArgumentException();
 		}
 		try {
 			return listOfUserCards.get(index - 1);
@@ -75,7 +75,7 @@ public class ManagerUtils {
 
 	public static boolean cardIsBlocked(AbstractCard card) {
 		if (card == null) {
-			throw new IllegalValueException();
+			throw new IllegalArgumentException();
 		}
 		if (card.getStatus().equals(CardStatus.BLOCKED)) {
 			return true;
@@ -85,7 +85,7 @@ public class ManagerUtils {
 
 	public static AbstractCard getCard(User user) {
 		if (user == null) {
-			throw new IllegalValueException();
+			throw new IllegalArgumentException();
 		}
 		System.out.println("Введите номер карточки:");
 		int choise = ManagerUtils.getInputNumber();
@@ -95,7 +95,7 @@ public class ManagerUtils {
 
 	public static boolean saveInDocument(User user) {
 		if (user == null) {
-			throw new IllegalValueException();
+			throw new IllegalArgumentException();
 		}
 		try (ObjectOutputStream outputStream = new ObjectOutputStream(
 				new FileOutputStream(new File("src/com/netcracker/files/outputfiles/" + user.hashCode() + ".txt")));) {
@@ -110,7 +110,7 @@ public class ManagerUtils {
 
 	public static User getUser(List<User> users, int index) {
 		if (users == null) {
-			throw new IllegalValueException();
+			throw new IllegalArgumentException();
 		}
 
 		try {

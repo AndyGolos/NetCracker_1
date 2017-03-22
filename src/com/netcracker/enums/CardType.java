@@ -6,11 +6,9 @@ public enum CardType {
 	public String getType() {
 		switch (this) {
 		case VISA:
-			return "VISA";
 		case MAESTRO:
-			return "MAESTRO";
 		case MASTERCARD:
-			return "MASTERCARD";
+			return this.name();
 		default:
 			return "тип не определён";
 		}

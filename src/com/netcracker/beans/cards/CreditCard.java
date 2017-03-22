@@ -47,7 +47,7 @@ public class CreditCard extends AbstractCard {
 
 	@Override
 	public String toString() {
-		return super.toString() + ",\t денег на счёте=" + moneyOnTheAccount + ",\t валидна=" + valid + " years";
+		return super.toString() + ",\t денег на счёте=" + moneyOnTheAccount + ",\t валидна=" + valid + " лет";
 	}
 
 	public int getMoneyOnTheAccount() {

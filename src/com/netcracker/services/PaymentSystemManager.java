@@ -8,26 +8,83 @@ import com.netcracker.beans.cards.CreditCard;
 import com.netcracker.beans.users.Admin;
 import com.netcracker.beans.users.Client;
 import com.netcracker.beans.users.User;
+import com.netcracker.exceptions.NoUserFoundException;
 
 public class PaymentSystemManager {
 
 	public static List<User> users = new ArrayList<>();
-	private static final String DATA_FILE_NAME = "src/com/netcracker/files/inputfiles/inputdata.txt";
+	public static final String DATA_FILE_NAME = "src/com/netcracker/files/inputfiles/inputdata.txt";
 
 	private PaymentSystemManager() {
+	}
+
+	public static void startMenu() {
+
+		// Инициализация данных из файла
+		users = Initialization.dataInitialization(users, DATA_FILE_NAME);
+
+		// System.out.println(User.getNumberOfClients());
+		// System.out.println(AbstractCard.getNumberOfCards());
+
+		// Если я явно не возвращаю юзеров - то мой лист пустой, почему?
+		// System.out.println(users);
+
+		System.out.println("Добрый день");
+		while (true) {
+			Reports.startMenu();
+			switch (ManagerUtils.getInputNumber()) {
+			case 1:
+				while (true) {
+
+					System.out.println("-----------------------");
+					System.out.println("Введите имя:");
+					String name = ManagerUtils.getInputString();
+					System.out.println("Введите фамилию:");
+					String surname = ManagerUtils.getInputString();
+					System.out.println("Введите пароль:");
+					int password = ManagerUtils.getInputNumber();
+					System.out.println("-----------------------");
+
+					User currentUser = null;
+					try {
+						currentUser = ManagerUtils.validate(new User(name, surname, password));
+					} catch (NoUserFoundException e) {
+						System.out.println("Такого пользователя нет в системе!");
+					}
+
+					// Узнаём, кем является наш User. И запсукаем
+					// переопределённый метод для клиента и админа
+					if (currentUser != null) {
+						if (currentUser instanceof Client) {
+							workWithUser((Client) currentUser);
+						} else if (currentUser instanceof Admin) {
+							workWithUser((Admin) currentUser);
+						}
+
+					} else {
+						System.out.println("Проверьте введённые вами данные!");
+						break;
+					}
+				}
+				break;
+			case 0:
+				Initialization.saveData(users, DATA_FILE_NAME);
+				Reports.exit();
+			default:
+				System.out.println("Введено неверное значение!");
+				break;
+			}
+
+		}
+
 	}
 
 	private static void workWithUser(Client client) {
 		System.out.println("Добро пожаловать. Вы вошли как клиент!");
 		while (true) {
-			System.out.println("-----------------------");
-			System.out.println("1. Пополнить счёт");
-			System.out.println("2. Совершить платёж");
-			System.out.println("3. Заблокировать карточку");
-			System.out.println("4. Посмотреть имеющиеся карточки");
-			System.out.println("5. Сохранить данные в файл");
-			System.out.println("0. Выход");
-			System.out.println("-----------------------");
+
+			// Выводит меню для клиента
+			Reports.clientMenu();
 
 			// Выбранная нами карточка
 			CreditCard currentCard;
@@ -56,6 +113,7 @@ public class PaymentSystemManager {
 			case 2:
 
 				Reports.getCards(client);
+
 				currentCard = (CreditCard) ManagerUtils.getCard(client);
 
 				if (currentCard != null) {
@@ -65,10 +123,9 @@ public class PaymentSystemManager {
 						break;
 					}
 
-					System.out.println("Выбирете услугу, которую хотите оплатить:");
-					System.out.println("1. Машину");
-					System.out.println("2. Квартиру");
-					System.out.println("3. Стоянку");
+					// Выводит список услуг, которые может оплатить клиент
+					Reports.clientServices();
+
 					int choise = ManagerUtils.getInputNumber();
 					int money;
 					switch (choise) {
@@ -112,7 +169,9 @@ public class PaymentSystemManager {
 			case 3:
 
 				Reports.getCards(client);
+
 				currentCard = (CreditCard) ManagerUtils.getCard(client);
+
 				if (currentCard != null) {
 					if (ManagerUtils.cardIsBlocked(currentCard)) {
 						System.out.println("Карточка уже заблокирована!");
@@ -136,6 +195,7 @@ public class PaymentSystemManager {
 				Initialization.saveData(users, DATA_FILE_NAME);
 				Reports.exit();
 			default:
+				System.out.println("Введено неверное значение!");
 				break;
 			}
 		}
@@ -145,17 +205,20 @@ public class PaymentSystemManager {
 	private static void workWithUser(Admin admin) {
 		System.out.println("Добро пожаловать. Вы вошли как Администратор!");
 		while (true) {
-			System.out.println("-----------------------");
-			System.out.println("1. Просмотреть всех юзеров в системе");
-			System.out.println("2. Разблокировать карточку");
-			System.out.println("0. Выход");
-			System.out.println("-----------------------");
-			User currentuser;
+
+			// Выводит меню для администратора
+			Reports.adminMenu();
+
+			// Выбранный юзер
+			User currentuser = null;
+
 			switch (ManagerUtils.getInputNumber()) {
+
 			case 1:
 				admin.getAllUsersInSystem(users);
 				break;
 			case 2:
+
 				System.out.println("Список клиентов:");
 				Reports.getAllClients(users);
 				System.out.println("Выбирите клиента:");
@@ -176,77 +239,13 @@ public class PaymentSystemManager {
 						}
 					}
 				}
-
 				break;
 			case 0:
 				Initialization.saveData(users, DATA_FILE_NAME);
 				Reports.exit();
 				break;
-
 			default:
 				System.out.println("Введите корректное число!");
-				break;
-			}
-
-		}
-
-	}
-
-	public static void startMenu() {
-
-		users = Initialization.dataInitialization(users, DATA_FILE_NAME);
-
-		// System.out.println(User.getNumberOfClients());
-		// System.out.println(AbstractCard.getNumberOfCards());
-
-		// Если я явно не возвращаю юзеров - то мой лист пустой, почему?
-		// System.out.println(users);
-
-		System.out.println("Добрый день");
-		while (true) {
-			System.out.println("-----------------------");
-			System.out.println("1. Авторизация");
-			System.out.println("0. Выход");
-			System.out.println("-----------------------");
-
-			switch (ManagerUtils.getInputNumber()) {
-			case 1:
-				while (true) {
-
-					System.out.println("-----------------------");
-					System.out.println("Введите имя:");
-					String name = ManagerUtils.getInputString();
-					System.out.println("Введите фамилию:");
-					String surname = ManagerUtils.getInputString();
-					System.out.println("Введите пароль:");
-					int password = ManagerUtils.getInputNumber();
-					System.out.println("-----------------------");
-
-					User currentUser = ManagerUtils.validate(new User(name, surname, password));
-
-					// Узнаём, кем является наш User. И запсукаем
-					// переопределённый метод для клиента и админа
-					if (currentUser != null) {
-						if (currentUser instanceof Client) {
-							workWithUser((Client) currentUser);
-						} else if (currentUser instanceof Admin) {
-							workWithUser((Admin) currentUser);
-						}
-
-					} else {
-						System.out.println("Проверьте введённые вами данные!");
-						break;
-					}
-				}
-				break;
-			case 0:
-				Initialization.saveData(users, DATA_FILE_NAME);
-				System.out.println("-----------------------");
-				System.out.println("Ждём вас в следующий раз!");
-				System.out.println("-----------------------");
-				System.exit(0);
-			default:
-				System.out.println("Введено неверное значение!");
 				break;
 			}
 
