@@ -20,6 +20,8 @@ public class ManagerUtils {
 	private ManagerUtils() {
 	}
 
+	// Добавить закрытие отока сканнер
+	// Избавиться от всех стектрейсов
 	public static int getInputNumber() {
 		int choise = -1;
 		while (choise < 0) {

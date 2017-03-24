@@ -20,6 +20,8 @@ public class PaymentSystemManager {
 
 	public static void startMenu() {
 
+		// System.out.println(CardType.VISA.toString());
+
 		// Инициализация данных из файла
 		users = Initialization.dataInitialization(users, DATA_FILE_NAME);
 
