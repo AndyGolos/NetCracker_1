@@ -63,9 +63,11 @@ public class StaticDataInput {
 			outputStream.writeObject(users);
 
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			System.out.println("Не найден файл: " + fileName);
+			System.exit(0);
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("IOException in StaticDataInput");
+			System.exit(0);
 		}
 
 	}

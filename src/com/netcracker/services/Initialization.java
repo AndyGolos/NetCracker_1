@@ -29,9 +29,11 @@ public class Initialization {
 			outputStream.writeObject(users);
 
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			System.out.println("Не найден файл: " + dataFileName);
+			System.exit(0);
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("IOException in saveData");
+			System.exit(0);
 		}
 
 	}
@@ -57,13 +59,16 @@ public class Initialization {
 			return users;
 
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			System.out.println("Не найден файл: " + dataFileName);
+			System.exit(0);
 			return null;
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("IOException");
+			System.exit(0);
 			return null;
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			System.out.println("Не удалось привести к List<User>");
+			System.exit(0);
 			return null;
 		} finally {
 
@@ -71,7 +76,7 @@ public class Initialization {
 				try {
 					inputStream.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					System.out.println("Не удалось закрыть inputStream");
 				}
 			}
 
@@ -79,7 +84,7 @@ public class Initialization {
 				try {
 					fileInputStream.close();
 				} catch (Exception e2) {
-					e2.printStackTrace();
+					System.out.println("Не удалось закрыть fileInputStream");
 				}
 			}
 

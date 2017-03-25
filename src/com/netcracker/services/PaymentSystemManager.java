@@ -102,17 +102,20 @@ public class PaymentSystemManager {
 
 				currentCard = (CreditCard) ManagerUtils.getCard(client);
 				if (currentCard != null) {
+
 					if (ManagerUtils.cardIsBlocked(currentCard)) {
 						System.out.println("Карточка заблокирована!");
 						break;
 					}
 
+					// Нужна красивая проверка на 0
 					System.out.println("Введите сумму:");
 					if (client.topUpAccount(currentCard, ManagerUtils.getInputNumber())) {
 						System.out.println("Счёт пополнен!");
 					} else {
 						System.out.println("Не удалось пополнить счёт!");
 					}
+
 				}
 				break;
 			case 2:
@@ -131,6 +134,8 @@ public class PaymentSystemManager {
 					// Выводит список услуг, которые может оплатить клиент
 					Reports.clientServices();
 
+					// Реагирует на 0 и выкидывает(не должно) и другие числа
+					// кроме 1 2 3
 					int choise = ManagerUtils.getInputNumber();
 					int money;
 					switch (choise) {
@@ -226,8 +231,23 @@ public class PaymentSystemManager {
 
 				System.out.println("Список клиентов:");
 				Reports.getAllClients(users);
+
+				// Отдельный метод?
+				int choise;
+				System.out.println("-----------------------");
 				System.out.println("Выбирите клиента:");
-				int choise = ManagerUtils.getInputNumber();
+				System.out.println("-----------------------");
+				while (true) {
+
+					choise = ManagerUtils.getInputNumber();
+
+					if (choise <= 0 || !(ManagerUtils.getUser(users, choise) instanceof Client)) {
+						System.out.println("Введено некорректное число! Повторите ввод:");
+						continue;
+					} else
+						break;
+				}
+
 				currentuser = ManagerUtils.getUser(users, choise);
 
 				if (currentuser != null) {

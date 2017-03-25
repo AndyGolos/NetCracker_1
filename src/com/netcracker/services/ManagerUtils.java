@@ -20,8 +20,6 @@ public class ManagerUtils {
 	private ManagerUtils() {
 	}
 
-	// Добавить закрытие отока сканнер
-	// Избавиться от всех стектрейсов
 	public static int getInputNumber() {
 		int choise = -1;
 		while (choise < 0) {
@@ -31,10 +29,10 @@ public class ManagerUtils {
 				if (choise >= 0) {
 					break;
 				} else {
-					System.out.println("Введено некорректное число!");
+					System.out.println("Введено некорректное число! Повторите ввод:");
 				}
 			} catch (InputMismatchException e) {
-				System.out.println("Введите число!");
+				System.out.println("Введите корректные данные!");
 			}
 		}
 		return choise;
@@ -87,10 +85,17 @@ public class ManagerUtils {
 		if (user == null) {
 			throw new IllegalArgumentException();
 		}
+		int choise;
 		System.out.println("Введите номер карточки:");
-		int choise = ManagerUtils.getInputNumber();
+		while (true) {
+			choise = ManagerUtils.getInputNumber();
+			if (choise > user.getUserCards().size() || choise == 0) {
+				System.out.println("Введено некорректное число! Повторите ввод:");
+				continue;
+			} else
+				break;
+		}
 		return getCard(user.getUserCards(), choise);
-
 	}
 
 	public static boolean saveInDocument(User user) {
@@ -104,12 +109,16 @@ public class ManagerUtils {
 				try {
 					writer.write(card + "\n");
 				} catch (IOException e) {
-					e.printStackTrace();
+					System.out.println("IOException in inner saveInDocument!");
+					System.exit(0);
 				}
 			});
+
 			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
+
+		} catch (IOException e) {
+			System.out.println("IOException in outer saveInDocument!");
+			System.exit(0);
 			return false;
 		}
 	}
@@ -122,7 +131,6 @@ public class ManagerUtils {
 		try {
 			return users.get(index - 1);
 		} catch (IndexOutOfBoundsException e) {
-			System.out.println("Введите корректное значение!");
 			return null;
 		}
 	}

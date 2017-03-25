@@ -15,7 +15,6 @@ public class Client extends User implements ClientActions {
 		super(id, name, surname, password, dateOfBirth);
 	}
 
-
 	@Override
 	public boolean blockCard(AbstractCard card) {
 		if (card.getStatus().equals(CardStatus.ACTIVE)) {
@@ -30,7 +29,7 @@ public class Client extends User implements ClientActions {
 		if (card == null) {
 			throw new IllegalArgumentException();
 		}
-		if (money < 0) {
+		if (money <= 0) {
 			return false;
 		} else {
 			card.setMoneyOnTheAccount(card.getMoneyOnTheAccount() + money);
@@ -43,7 +42,7 @@ public class Client extends User implements ClientActions {
 	public boolean replenishAccount(CreditCard card, int money) {
 		if (money < 0) {
 			return false;
-		} else if ((card.getMoneyOnTheAccount() - money) < 0) {
+		} else if ((card.getMoneyOnTheAccount() - money) <= 0) {
 			return false;
 		} else {
 			card.setMoneyOnTheAccount(card.getMoneyOnTheAccount() - money);
