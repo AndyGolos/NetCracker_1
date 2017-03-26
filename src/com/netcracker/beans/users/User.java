@@ -92,11 +92,10 @@ public class User implements Serializable {
 		return true;
 	}
 
-	
 	@Override
 	public String toString() {
-		return "id=" + id + ",\t имя=" + name + ",\t\t фамилия=" + surname + ",\t пароль=" + password
-				+ ",\t дата регистрации=" + registrationDate + ",\t дата рождения=" + dateOfBirth;
+		return "id=" + id + ",\t имя=" + name + ",\t\t фамилия=" + surname + ",\t дата регистрации=" + registrationDate
+				+ ",\t дата рождения=" + dateOfBirth;
 	}
 
 	public int getId() {

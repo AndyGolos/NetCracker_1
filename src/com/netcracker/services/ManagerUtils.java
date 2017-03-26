@@ -9,9 +9,12 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.netcracker.beans.cards.AbstractCard;
+import com.netcracker.beans.cards.CreditCard;
+import com.netcracker.beans.users.Client;
 import com.netcracker.beans.users.User;
 import com.netcracker.enums.CardStatus;
 import com.netcracker.exceptions.NoUserFoundException;
+import com.netcracker.exceptions.NotEnoughMoneyException;
 
 public class ManagerUtils {
 
@@ -86,7 +89,9 @@ public class ManagerUtils {
 			throw new IllegalArgumentException();
 		}
 		int choise;
+		System.out.println("-----------------------");
 		System.out.println("Введите номер карточки:");
+		System.out.println("-----------------------");
 		while (true) {
 			choise = ManagerUtils.getInputNumber();
 			if (choise > user.getUserCards().size() || choise == 0) {
@@ -133,6 +138,53 @@ public class ManagerUtils {
 		} catch (IndexOutOfBoundsException e) {
 			return null;
 		}
+	}
+
+	public static boolean payFor(Client client, CreditCard currentCard) {
+
+		if (client == null || currentCard == null) {
+			throw new IllegalArgumentException();
+		}
+
+		int money = ManagerUtils.getInputNumber();
+		try {
+			if (client.replenishAccount(currentCard, money)) {
+				System.out.println("Оплачено!");
+				return true;
+			} else {
+				System.out.println("Введено некорректное число! Повторите ввод!");
+				return false;
+			}
+		} catch (NotEnoughMoneyException e) {
+			System.out.println("Недостаточно средств на счёте!");
+			return true;
+		}
+	}
+
+	public static User getClientFromListOfUsers(List<User> users) {
+
+		if (users == null) {
+			throw new IllegalArgumentException();
+		}
+
+		int choise;
+		User currentuser;
+		System.out.println("-----------------------");
+		System.out.println("Выбирите клиента:");
+		System.out.println("-----------------------");
+		while (true) {
+
+			choise = ManagerUtils.getInputNumber();
+
+			if (choise <= 0 || !(ManagerUtils.getUser(users, choise) instanceof Client)) {
+				System.out.println("Введено некорректное число! Повторите ввод:");
+				continue;
+			} else
+				break;
+		}
+
+		currentuser = ManagerUtils.getUser(users, choise);
+		return currentuser;
 	}
 
 }

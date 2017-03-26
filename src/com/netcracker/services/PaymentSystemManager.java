@@ -20,16 +20,8 @@ public class PaymentSystemManager {
 
 	public static void startMenu() {
 
-		// System.out.println(CardType.VISA.toString());
-
 		// Инициализация данных из файла
 		users = Initialization.dataInitialization(users, DATA_FILE_NAME);
-
-		// users.get(0).getUserCards().add(new CreditCard(20, 1111,
-		// CardStatus.ACTIVE, CardType.MAESTRO, 5));
-
-		// System.out.println(User.getNumberOfClients());
-		// System.out.println(AbstractCard.getNumberOfCards());
 
 		// Если я явно не возвращаю юзеров - то мой лист пустой, почему?
 		// System.out.println(users);
@@ -65,28 +57,28 @@ public class PaymentSystemManager {
 						} else if (currentUser instanceof Admin) {
 							workWithUser((Admin) currentUser);
 						}
-
-					} else {
-						System.out.println("Проверьте введённые вами данные!");
-						break;
 					}
+					break;
 				}
 				break;
 			case 0:
 				Initialization.saveData(users, DATA_FILE_NAME);
 				Reports.exit();
 			default:
-				System.out.println("Введено неверное значение!");
+				System.out.println("Введено неверное значение! Повторите ввод:");
 				break;
 			}
-
 		}
-
 	}
 
 	private static void workWithUser(Client client) {
+		boolean toAutorization = false;
 		System.out.println("Добро пожаловать. Вы вошли как клиент!");
 		while (true) {
+
+			// Выход в меню авторизации
+			if (toAutorization)
+				break;
 
 			// Выводит меню для клиента
 			Reports.clientMenu();
@@ -107,74 +99,80 @@ public class PaymentSystemManager {
 						System.out.println("Карточка заблокирована!");
 						break;
 					}
-
-					// Нужна красивая проверка на 0
+					System.out.println("-----------------------");
 					System.out.println("Введите сумму:");
-					if (client.topUpAccount(currentCard, ManagerUtils.getInputNumber())) {
-						System.out.println("Счёт пополнен!");
-					} else {
-						System.out.println("Не удалось пополнить счёт!");
+					System.out.println("-----------------------");
+					while (true) {
+						if (client.topUpAccount(currentCard, ManagerUtils.getInputNumber())) {
+							System.out.println("Счёт пополнен!");
+							break;
+						} else {
+							System.out.println("Введено некорректное число! Повторите ввод:");
+						}
 					}
-
 				}
 				break;
 			case 2:
-
+				boolean back = false;
 				Reports.getCards(client);
 
 				currentCard = (CreditCard) ManagerUtils.getCard(client);
 
-				if (currentCard != null) {
+				if (currentCard == null)
+					break;
 
-					if (ManagerUtils.cardIsBlocked(currentCard)) {
-						System.out.println("Карточка заблокирована!");
+				if (ManagerUtils.cardIsBlocked(currentCard)) {
+					System.out.println("Карточка заблокирована!");
+					break;
+				}
+
+				// Выводит список услуг, которые может оплатить клиент
+				Reports.clientServices();
+
+				while (true) {
+
+					if (back)
 						break;
-					}
 
-					// Выводит список услуг, которые может оплатить клиент
-					Reports.clientServices();
-
-					// Реагирует на 0 и выкидывает(не должно) и другие числа
-					// кроме 1 2 3
-					int choise = ManagerUtils.getInputNumber();
-					int money;
-					switch (choise) {
+					switch (ManagerUtils.getInputNumber()) {
 					case 1:
+						System.out.println("-----------------------");
 						System.out.println("Введите сумму:");
-						money = ManagerUtils.getInputNumber();
-
-						if (client.replenishAccount(currentCard, money)) {
-							System.out.println("Машина оплачена!");
-						} else {
-							System.out.println("Не удалось оплатить! Повторите операцию!");
+						System.out.println("-----------------------");
+						while (true) {
+							if (ManagerUtils.payFor(client, currentCard))
+								back = true;
+							break;
 						}
 						break;
 					case 2:
+						System.out.println("-----------------------");
 						System.out.println("Введите сумму:");
-						money = ManagerUtils.getInputNumber();
-
-						if (client.replenishAccount(currentCard, money)) {
-							System.out.println("Квартира оплачена!");
-						} else {
-							System.out.println("Не удалось оплатить! Повторите операцию!");
+						System.out.println("-----------------------");
+						while (true) {
+							if (ManagerUtils.payFor(client, currentCard))
+								back = true;
+							break;
 						}
 						break;
 					case 3:
+						System.out.println("-----------------------");
 						System.out.println("Введите сумму:");
-						money = ManagerUtils.getInputNumber();
-
-						if (client.replenishAccount(currentCard, money)) {
-							System.out.println("Стоянка оплачена!");
-						} else {
-							System.out.println("Не удалось оплатить! Повторите операцию!");
+						System.out.println("-----------------------");
+						while (true) {
+							if (ManagerUtils.payFor(client, currentCard))
+								back = true;
+							break;
 						}
 						break;
+					case 0:
+						back = true;
+						break;
 					default:
-						System.out.println("Ошибка");
+						System.out.println("Введено некорректное число! Повторите ввод:");
 						break;
 					}
 				}
-
 				break;
 			case 3:
 
@@ -201,11 +199,15 @@ public class PaymentSystemManager {
 					System.out.println("Не удалось сохранить информацию о клиенте!");
 				}
 				break;
+			case 6:
+				toAutorization = true;
+				break;
 			case 0:
 				Initialization.saveData(users, DATA_FILE_NAME);
 				Reports.exit();
+				break;
 			default:
-				System.out.println("Введено неверное значение!");
+				System.out.println("Введено неверное значение! Повторите ввод:");
 				break;
 			}
 		}
@@ -213,8 +215,13 @@ public class PaymentSystemManager {
 	}
 
 	private static void workWithUser(Admin admin) {
+		boolean exit = false;
 		System.out.println("Добро пожаловать. Вы вошли как Администратор!");
 		while (true) {
+
+			// Выход в меню авторизации
+			if (exit)
+				break;
 
 			// Выводит меню для администратора
 			Reports.adminMenu();
@@ -232,23 +239,7 @@ public class PaymentSystemManager {
 				System.out.println("Список клиентов:");
 				Reports.getAllClients(users);
 
-				// Отдельный метод?
-				int choise;
-				System.out.println("-----------------------");
-				System.out.println("Выбирите клиента:");
-				System.out.println("-----------------------");
-				while (true) {
-
-					choise = ManagerUtils.getInputNumber();
-
-					if (choise <= 0 || !(ManagerUtils.getUser(users, choise) instanceof Client)) {
-						System.out.println("Введено некорректное число! Повторите ввод:");
-						continue;
-					} else
-						break;
-				}
-
-				currentuser = ManagerUtils.getUser(users, choise);
+				currentuser = ManagerUtils.getClientFromListOfUsers(users);
 
 				if (currentuser != null) {
 
@@ -265,12 +256,15 @@ public class PaymentSystemManager {
 					}
 				}
 				break;
+			case 3:
+				exit = true;
+				break;
 			case 0:
 				Initialization.saveData(users, DATA_FILE_NAME);
 				Reports.exit();
 				break;
 			default:
-				System.out.println("Введите корректное число!");
+				System.out.println("Введите неверное число! Повторите ввод:");
 				break;
 			}
 

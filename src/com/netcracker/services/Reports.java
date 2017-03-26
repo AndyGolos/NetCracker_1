@@ -58,6 +58,7 @@ public class Reports {
 		System.out.println("3. Заблокировать карточку");
 		System.out.println("4. Посмотреть имеющиеся карточки");
 		System.out.println("5. Сохранить данные в файл");
+		System.out.println("6. Назад");
 		System.out.println("0. Выход");
 		System.out.println("-----------------------");
 	}
@@ -66,15 +67,19 @@ public class Reports {
 		System.out.println("-----------------------");
 		System.out.println("1. Просмотреть всех юзеров в системе");
 		System.out.println("2. Разблокировать карточку");
+		System.out.println("3. Назад");
 		System.out.println("0. Выход");
 		System.out.println("-----------------------");
 	}
 
 	public static void clientServices() {
+		System.out.println("-----------------------");
 		System.out.println("Выбирете услугу, которую хотите оплатить:");
 		System.out.println("1. Машину");
 		System.out.println("2. Квартиру");
 		System.out.println("3. Стоянку");
+		System.out.println("0. Назад");
+		System.out.println("-----------------------");
 	}
 
 }

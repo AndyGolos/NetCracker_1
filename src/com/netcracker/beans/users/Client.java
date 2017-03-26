@@ -5,6 +5,7 @@ import java.util.Date;
 import com.netcracker.beans.cards.AbstractCard;
 import com.netcracker.beans.cards.CreditCard;
 import com.netcracker.enums.CardStatus;
+import com.netcracker.exceptions.NotEnoughMoneyException;
 import com.netcracker.interfaces.ClientActions;
 
 public class Client extends User implements ClientActions {
@@ -40,10 +41,10 @@ public class Client extends User implements ClientActions {
 
 	@Override
 	public boolean replenishAccount(CreditCard card, int money) {
-		if (money < 0) {
+		if (money <= 0) {
 			return false;
 		} else if ((card.getMoneyOnTheAccount() - money) <= 0) {
-			return false;
+			throw new NotEnoughMoneyException();
 		} else {
 			card.setMoneyOnTheAccount(card.getMoneyOnTheAccount() - money);
 			return true;
