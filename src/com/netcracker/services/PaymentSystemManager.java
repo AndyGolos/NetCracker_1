@@ -47,16 +47,15 @@ public class PaymentSystemManager {
 						currentUser = ManagerUtils.validate(new User(name, surname, password));
 					} catch (NoUserFoundException e) {
 						System.out.println("Такого пользователя нет в системе!");
+						break;
 					}
 
 					// Узнаём, кем является наш User. И запсукаем
 					// переопределённый метод для клиента и админа
-					if (currentUser != null) {
-						if (currentUser instanceof Client) {
-							workWithUser((Client) currentUser);
-						} else if (currentUser instanceof Admin) {
-							workWithUser((Admin) currentUser);
-						}
+					if (currentUser instanceof Client) {
+						workWithUser((Client) currentUser);
+					} else {
+						workWithUser((Admin) currentUser);
 					}
 					break;
 				}
