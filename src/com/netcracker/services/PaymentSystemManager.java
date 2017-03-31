@@ -9,11 +9,12 @@ import com.netcracker.beans.users.Admin;
 import com.netcracker.beans.users.Client;
 import com.netcracker.beans.users.User;
 import com.netcracker.exceptions.NoUserFoundException;
+import com.netcracker.utils.IOUtils;
 
 public class PaymentSystemManager {
 
 	public static List<User> users = new ArrayList<>();
-	public static final String DATA_FILE_NAME = "src/com/netcracker/files/inputfiles/inputdata.txt";
+	public static final String DATA_FILE_NAME = "resources/inputfiles/inputdata.txt";
 
 	private PaymentSystemManager() {
 	}
@@ -21,7 +22,7 @@ public class PaymentSystemManager {
 	public static void startMenu() {
 
 		// Инициализация данных из файла
-		users = Initialization.dataInitialization(users, DATA_FILE_NAME);
+		users = Initialization.dataInitialization(DATA_FILE_NAME);
 
 		// Если я явно не возвращаю юзеров - то мой лист пустой, почему?
 		// System.out.println(users);
@@ -29,22 +30,24 @@ public class PaymentSystemManager {
 		System.out.println("Добрый день");
 		while (true) {
 			Reports.startMenu();
-			switch (ManagerUtils.getInputNumber()) {
+			switch (IOUtils.getInputNumber()) {
 			case 1:
 				while (true) {
 
 					System.out.println("-----------------------");
 					System.out.println("Введите имя:");
-					String name = ManagerUtils.getInputString();
+					String name = IOUtils.getInputString();
 					System.out.println("Введите фамилию:");
-					String surname = ManagerUtils.getInputString();
+					String surname = IOUtils.getInputString();
 					System.out.println("Введите пароль:");
-					int password = ManagerUtils.getInputNumber();
+					int password = IOUtils.getInputNumber();
 					System.out.println("-----------------------");
 
 					User currentUser = null;
+					UserService userService = new UserService();
+
 					try {
-						currentUser = ManagerUtils.validate(new User(name, surname, password));
+						currentUser = userService.getUser(name, surname, password);
 					} catch (NoUserFoundException e) {
 						System.out.println("Такого пользователя нет в системе!");
 						break;
@@ -61,7 +64,7 @@ public class PaymentSystemManager {
 				}
 				break;
 			case 0:
-				Initialization.saveData(users, DATA_FILE_NAME);
+				DocumentService.saveData(users, DATA_FILE_NAME);
 				Reports.exit();
 			default:
 				System.out.println("Введено неверное значение! Повторите ввод:");
@@ -71,6 +74,12 @@ public class PaymentSystemManager {
 	}
 
 	private static void workWithUser(Client client) {
+
+		UserService clientService = new ClientService();
+
+		System.out.println(clientService.getClass());
+
+		CardService cardService = new CardService();
 		boolean toAutorization = false;
 		System.out.println("Добро пожаловать. Вы вошли как клиент!");
 		while (true) {
@@ -85,16 +94,16 @@ public class PaymentSystemManager {
 			// Выбранная нами карточка
 			CreditCard currentCard;
 
-			switch (ManagerUtils.getInputNumber()) {
+			switch (IOUtils.getInputNumber()) {
 			case 1:
 
 				// выводит список карточек юзера
 				Reports.getCards(client);
 
-				currentCard = (CreditCard) ManagerUtils.getCard(client);
+				currentCard = (CreditCard) cardService.getCard(client);
 				if (currentCard != null) {
 
-					if (ManagerUtils.cardIsBlocked(currentCard)) {
+					if (cardService.cardIsBlocked(currentCard)) {
 						System.out.println("Карточка заблокирована!");
 						break;
 					}
@@ -102,7 +111,7 @@ public class PaymentSystemManager {
 					System.out.println("Введите сумму:");
 					System.out.println("-----------------------");
 					while (true) {
-						if (client.topUpAccount(currentCard, ManagerUtils.getInputNumber())) {
+						if (((ClientService) clientService).topUpAccount(currentCard, IOUtils.getInputNumber())) {
 							System.out.println("Счёт пополнен!");
 							break;
 						} else {
@@ -115,12 +124,12 @@ public class PaymentSystemManager {
 				boolean back = false;
 				Reports.getCards(client);
 
-				currentCard = (CreditCard) ManagerUtils.getCard(client);
+				currentCard = (CreditCard) cardService.getCard(client);
 
 				if (currentCard == null)
 					break;
 
-				if (ManagerUtils.cardIsBlocked(currentCard)) {
+				if (cardService.cardIsBlocked(currentCard)) {
 					System.out.println("Карточка заблокирована!");
 					break;
 				}
@@ -133,13 +142,13 @@ public class PaymentSystemManager {
 					if (back)
 						break;
 
-					switch (ManagerUtils.getInputNumber()) {
+					switch (IOUtils.getInputNumber()) {
 					case 1:
 						System.out.println("-----------------------");
 						System.out.println("Введите сумму:");
 						System.out.println("-----------------------");
 						while (true) {
-							if (ManagerUtils.payFor(client, currentCard))
+							if (((ClientService) clientService).payFor(client, currentCard))
 								back = true;
 							break;
 						}
@@ -149,7 +158,7 @@ public class PaymentSystemManager {
 						System.out.println("Введите сумму:");
 						System.out.println("-----------------------");
 						while (true) {
-							if (ManagerUtils.payFor(client, currentCard))
+							if (((ClientService) clientService).payFor(client, currentCard))
 								back = true;
 							break;
 						}
@@ -159,7 +168,7 @@ public class PaymentSystemManager {
 						System.out.println("Введите сумму:");
 						System.out.println("-----------------------");
 						while (true) {
-							if (ManagerUtils.payFor(client, currentCard))
+							if (((ClientService) clientService).payFor(client, currentCard))
 								back = true;
 							break;
 						}
@@ -177,13 +186,13 @@ public class PaymentSystemManager {
 
 				Reports.getCards(client);
 
-				currentCard = (CreditCard) ManagerUtils.getCard(client);
+				currentCard = (CreditCard) cardService.getCard(client);
 
 				if (currentCard != null) {
-					if (ManagerUtils.cardIsBlocked(currentCard)) {
+					if (cardService.cardIsBlocked(currentCard)) {
 						System.out.println("Карточка уже заблокирована!");
 					} else {
-						client.blockCard(currentCard);
+						((ClientService) clientService).blockCard(currentCard);
 						System.out.println("Карточка успешно заблокирована!");
 					}
 				}
@@ -192,7 +201,7 @@ public class PaymentSystemManager {
 				Reports.getCards(client);
 				break;
 			case 5:
-				if (ManagerUtils.saveInDocument(client)) {
+				if (DocumentService.saveCardsInDocument(client)) {
 					System.out.println("Информация о клиенте успешно сохранена в файл: " + client.hashCode());
 				} else {
 					System.out.println("Не удалось сохранить информацию о клиенте!");
@@ -202,7 +211,7 @@ public class PaymentSystemManager {
 				toAutorization = true;
 				break;
 			case 0:
-				Initialization.saveData(users, DATA_FILE_NAME);
+				DocumentService.saveData(users, DATA_FILE_NAME);
 				Reports.exit();
 				break;
 			default:
@@ -214,6 +223,10 @@ public class PaymentSystemManager {
 	}
 
 	private static void workWithUser(Admin admin) {
+
+		UserService adminService = new AdminService();
+
+		CardService cardService = new CardService();
 		boolean exit = false;
 		System.out.println("Добро пожаловать. Вы вошли как Администратор!");
 		while (true) {
@@ -228,26 +241,26 @@ public class PaymentSystemManager {
 			// Выбранный юзер
 			User currentuser = null;
 
-			switch (ManagerUtils.getInputNumber()) {
+			switch (IOUtils.getInputNumber()) {
 
 			case 1:
-				admin.getAllUsersInSystem(users);
+				((AdminService) adminService).getAllUsersInSystem(users);
 				break;
 			case 2:
 
 				System.out.println("Список клиентов:");
 				Reports.getAllClients(users);
 
-				currentuser = ManagerUtils.getClientFromListOfUsers(users);
+				currentuser = adminService.getClient(users);
 
 				if (currentuser != null) {
 
 					Reports.getCards(currentuser);
-					AbstractCard currentCard = ManagerUtils.getCard(currentuser);
+					AbstractCard currentCard = cardService.getCard(currentuser);
 
 					if (currentCard != null) {
-						if (ManagerUtils.cardIsBlocked(currentCard)) {
-							admin.unblockCard(currentCard);
+						if (cardService.cardIsBlocked(currentCard)) {
+							((AdminService) adminService).unblockCard(currentCard);
 							System.out.println("Карточка успешно разблокирована!");
 						} else {
 							System.out.println("Ошибка! Карточка уже разблокирована!");
@@ -259,7 +272,7 @@ public class PaymentSystemManager {
 				exit = true;
 				break;
 			case 0:
-				Initialization.saveData(users, DATA_FILE_NAME);
+				DocumentService.saveData(users, DATA_FILE_NAME);
 				Reports.exit();
 				break;
 			default:

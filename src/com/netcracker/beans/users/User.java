@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.netcracker.beans.cards.AbstractCard;
 
-public class User implements Serializable {
+public abstract class User implements Serializable {
 
 	private static final long serialVersionUID = 7604616806259567350L;
 
@@ -21,7 +21,6 @@ public class User implements Serializable {
 	private Date dateOfBirth;
 	private static int numberOfClients = 0;
 
-	// Для компоратора!
 	public User(String name, String surname, int password) {
 		this.name = name;
 		this.surname = surname;

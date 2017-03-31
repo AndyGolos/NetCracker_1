@@ -11,8 +11,8 @@ public class UserComparator implements Comparator<User> {
 		if (user1.getName().toLowerCase().equals(user2.getName().toLowerCase())
 				&& user1.getSurname().toLowerCase().equals(user2.getSurname().toLowerCase())
 				&& user1.getPassword() == user2.getPassword()) {
-			return 1;
-		} else
 			return 0;
+		} else
+			return -1;
 	}
 }

@@ -19,7 +19,6 @@ public abstract class AbstractCard implements Serializable {
 	private static int numberOfCards = 0;
 
 	public AbstractCard(int id, int pinCode, CardStatus status, CardType type) {
-		super();
 		this.id = id;
 		this.pinCode = pinCode;
 		this.status = status;
@@ -31,7 +30,7 @@ public abstract class AbstractCard implements Serializable {
 	// Выводит данные немного кривовато
 	@Override
 	public String toString() {
-		return "id=" + id + ",\t пин=" + pinCode + ",\t статус=" + status + ", тип=" + type + ",\t\t дата регистрации="
+		return "id=" + id + ",\t статус=" + status + ", тип=" + type + ",\t\t дата регистрации="
 				+ new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(timeOfRegistration);
 	}
 

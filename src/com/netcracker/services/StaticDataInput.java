@@ -31,7 +31,7 @@ public class StaticDataInput {
 
 			String[] adminsNames = { "Эдуардо", "Максим", "Нерзул" };
 
-			String[] adminsSurnames = { "Первый", "Второй", "Игоревич" };
+			String[] adminsSurnames = { "Первый", "Величайший", "Игоревич" };
 
 			CardType[] type = { CardType.VISA, CardType.MAESTRO, CardType.MASTERCARD, CardType.VISA, CardType.MAESTRO,
 					CardType.MASTERCARD, CardType.VISA, CardType.MAESTRO, CardType.MASTERCARD, CardType.VISA,
