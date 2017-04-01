@@ -6,7 +6,7 @@ import java.util.ListIterator;
 import com.netcracker.beans.users.Admin;
 import com.netcracker.beans.users.Client;
 import com.netcracker.beans.users.User;
-import com.netcracker.exceptions.NoUserFoundException;
+import com.netcracker.exceptions.UserNotFoundException;
 import com.netcracker.services.PaymentSystemManager;
 import com.netcracker.services.UserComparator;
 import com.netcracker.utils.IOUtils;
@@ -61,7 +61,7 @@ public class UserDao {
 				return user;
 			}
 		}
-		throw new NoUserFoundException();
+		throw new UserNotFoundException();
 	}
 
 }

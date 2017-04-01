@@ -21,7 +21,6 @@ public class AdminService extends UserService implements AdminActions {
 			System.out.println(counter + ". " + iterator.next());
 			counter++;
 		}
-
 	}
 
 	@Override

@@ -8,7 +8,7 @@ import com.netcracker.beans.cards.CreditCard;
 import com.netcracker.beans.users.Admin;
 import com.netcracker.beans.users.Client;
 import com.netcracker.beans.users.User;
-import com.netcracker.exceptions.NoUserFoundException;
+import com.netcracker.exceptions.UserNotFoundException;
 import com.netcracker.utils.IOUtils;
 
 public class PaymentSystemManager {
@@ -48,7 +48,7 @@ public class PaymentSystemManager {
 
 					try {
 						currentUser = userService.getUser(name, surname, password);
-					} catch (NoUserFoundException e) {
+					} catch (UserNotFoundException e) {
 						System.out.println("Такого пользователя нет в системе!");
 						break;
 					}
@@ -76,10 +76,8 @@ public class PaymentSystemManager {
 	private static void workWithUser(Client client) {
 
 		UserService clientService = new ClientService();
-
-		System.out.println(clientService.getClass());
-
 		CardService cardService = new CardService();
+
 		boolean toAutorization = false;
 		System.out.println("Добро пожаловать. Вы вошли как клиент!");
 		while (true) {
