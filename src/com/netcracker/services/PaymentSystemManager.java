@@ -245,6 +245,9 @@ public class PaymentSystemManager {
 				((AdminService) adminService).getAllUsersInSystem(users);
 				break;
 			case 2:
+				((AdminService) adminService).sortUsersById();
+				break;
+			case 3:
 
 				System.out.println("Список клиентов:");
 				Reports.getAllClients(users);
@@ -266,7 +269,7 @@ public class PaymentSystemManager {
 					}
 				}
 				break;
-			case 3:
+			case 4:
 				exit = true;
 				break;
 			case 0:

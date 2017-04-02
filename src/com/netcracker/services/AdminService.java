@@ -1,5 +1,6 @@
 package com.netcracker.services;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -19,6 +20,29 @@ public class AdminService extends UserService implements AdminActions {
 		Iterator<User> iterator = users.iterator();
 		while (iterator.hasNext()) {
 			System.out.println(counter + ". " + iterator.next());
+			counter++;
+		}
+	}
+
+	public void sortUsersById() {
+		List<User> sortedList = new ArrayList<>(PaymentSystemManager.users);
+		SortById id;
+		for (int i = sortedList.size() - 1; i >= 0; i--) {
+			for (int j = 0; j < i; j++) {
+				id = new SortById(sortedList.get(j).getId());
+				User user, secondUser;
+				if (id.compareTo(sortedList.get(j + 1)) == 1) {
+					user = sortedList.get(j + 1);
+					secondUser = sortedList.get(j);
+					sortedList.set(j + 1, secondUser);
+					sortedList.set(j, user);
+				}
+			}
+		}
+
+		int counter = 1;
+		for (User user : sortedList) {
+			System.out.println(counter + ". " + user);
 			counter++;
 		}
 	}

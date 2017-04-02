@@ -66,8 +66,9 @@ public class Reports {
 	public static void adminMenu() {
 		System.out.println("-----------------------");
 		System.out.println("1. Просмотреть всех юзеров в системе");
-		System.out.println("2. Разблокировать карточку");
-		System.out.println("3. Назад");
+		System.out.println("2. Вывести всех юзеров отсортированных по id");
+		System.out.println("3. Разблокировать карточку");
+		System.out.println("4. Назад");
 		System.out.println("0. Выход");
 		System.out.println("-----------------------");
 	}
