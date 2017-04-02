@@ -1,7 +1,1 @@
-com.netcracker.beans.cards
-com.netcracker.beans.users
-com.netcracker.enums
-com.netcracker.exceptions
-com.netcracker.interfaces
-com.netcracker.main
 com.netcracker.services

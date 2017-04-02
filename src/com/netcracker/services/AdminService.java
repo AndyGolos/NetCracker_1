@@ -39,7 +39,6 @@ public class AdminService extends UserService implements AdminActions {
 				}
 			}
 		}
-
 		int counter = 1;
 		for (User user : sortedList) {
 			System.out.println(counter + ". " + user);
