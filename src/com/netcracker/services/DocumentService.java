@@ -12,7 +12,7 @@ import com.netcracker.beans.users.User;
 
 public class DocumentService {
 
-	private final static String ROOT_DIRECTORY_PATH = "resourses/files/";
+	private final static String ROOT_DIRECTORY_PATH = "src/com/netcracker/resources/outputfiles/";
 	private final static String FILE_EXTENTION = ".txt";
 
 	private DocumentService() {
@@ -22,8 +22,7 @@ public class DocumentService {
 		if (user == null) {
 			throw new IllegalArgumentException();
 		}
-		try (FileWriter writer = new FileWriter(
-				new File(ROOT_DIRECTORY_PATH + "outputfiles/" + user.hashCode() + FILE_EXTENTION))) {
+		try (FileWriter writer = new FileWriter(new File(ROOT_DIRECTORY_PATH + user.hashCode() + FILE_EXTENTION))) {
 
 			user.getUserCards().forEach(card -> {
 				try {

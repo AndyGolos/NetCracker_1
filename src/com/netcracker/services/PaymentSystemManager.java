@@ -14,7 +14,7 @@ import com.netcracker.utils.IOUtils;
 public class PaymentSystemManager {
 
 	public static List<User> users = new ArrayList<>();
-	public static final String DATA_FILE_NAME = "resources/inputfiles/inputdata.txt";
+	public static final String DATA_FILE_NAME = "src/com/netcracker/resources/inputfiles/inputdata.txt";
 
 	private PaymentSystemManager() {
 	}
