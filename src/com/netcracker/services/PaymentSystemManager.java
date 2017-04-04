@@ -146,9 +146,10 @@ public class PaymentSystemManager {
 						System.out.println("Введите сумму:");
 						System.out.println("-----------------------");
 						while (true) {
-							if (((ClientService) clientService).payFor(client, currentCard))
+							if (((ClientService) clientService).payFor(client, currentCard)) {
 								back = true;
-							break;
+								break;
+							}
 						}
 						break;
 					case 2:
